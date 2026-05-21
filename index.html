@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convertidor y Redimensionador de Imágenes</title>
+<style>
+
+  body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    text-align: center;
+  }
+
+  h2 {
+    color: #333;
+  }
+
+  #container {
+    width: 90%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+
+  label {
+    display: block;
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    width: 20%;
+    margin: 0 auto;
+  }
+
+  #formatSelect {
+    width: 20%;
+    margin: 0 auto;
+  }
+
+  label:hover {
+    background-color: #2980b9;
+  }
+
+  select, input[type="number"], button {
+    margin-top: 10px;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: calc(50% - 10px);
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #2ecc71;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  button:hover {
+    background-color: #27ae60;
+  }
+
+  #result {
+    margin-top: 20px;
+  }
+
+  #thumbnail {
+    max-width: 320px;
+    margin-top: 20px;
+    max-height: 320px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  #thumbnail img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  #sicesimg {
+    width: 30%;
+    margin: 0 auto;
+  }
+
+</style>
+</head>
+<body>
+
+<div>
+  <h2>Convertidor y Redimensionador de Imágenes</h2>
+</div>
+
+<label for="fileInput">Seleccionar Imagen</label>
+<input type="file" id="fileInput" onchange="previewImage()">
+<br>
+<div id="thumbnail"></div>
+<br>
+<div>
+  <select id="formatSelect">
+    <option value="jpeg">JPEG</option>
+    <option value="png">PNG</option>
+  </select>
+</div>
+<div id="sicesimg">
+  <input type="number" id="maxWidthInput" placeholder="Ancho máximo (opcional)">
+  <input type="number" id="maxHeightInput" placeholder="Alto máximo (opcional)">
+</div>
+<div id="sicesimg">
+  <button onclick="processImage()">Procesar Imagen</button>
+  <button onclick="limpiador()">Limpiar Formulario</button>
+</div>
+<div>
+  <div id="result"></div>
+</div>
+
+<script>
+function previewImage() {
+  const fileInput = document.getElementById('fileInput');
+  const thumbnail = document.getElementById('thumbnail');
+  const file = fileInput.files[0];
+
+  if (!file) {
+    thumbnail.innerHTML = '';
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(event) {
+    const img = new Image();
+    img.onload = function() {
+      thumbnail.innerHTML = '';
+      thumbnail.appendChild(img);
+    };
+    img.src = event.target.result;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+function limpiador() {
+  var limp1 = document.getElementById('maxWidthInput');
+  var limp2 = document.getElementById('maxHeightInput');
+  var div1 = document.getElementById("thumbnail");
+  var div2 = document.getElementById("result");
+  var dropdown1 = document.getElementById("formatSelect");
+  limp1.value = "";
+  limp2.value = "";
+  div1.innerHTML = "";
+  div2.innerHTML = "";
+  dropdown1.selectedIndex = 0;
+}
+
+function processImage() {
+  const fileInput = document.getElementById('fileInput');
+  const formatSelect = document.getElementById('formatSelect');
+  const maxWidthInput = document.getElementById('maxWidthInput').value;
+  const maxHeightInput = document.getElementById('maxHeightInput').value;
+
+  const file = fileInput.files[0];
+  
+  if (!file) {
+    alert('Por favor selecciona una imagen.');
+    return;
+  }
+
+  const reader = new FileReader();
+  
+  reader.onload = function(event) {
+    const img = new Image();
+    img.onload = function() {
+      let width = img.width;
+      let height = img.height;
+      
+      if (maxWidthInput && width > maxWidthInput) {
+        height *= maxWidthInput / width;
+        width = maxWidthInput;
+      }
+
+      if (maxHeightInput && height > maxHeightInput) {
+        width *= maxHeightInput / height;
+        height = maxHeightInput;
+      }
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const format = formatSelect.value;
+      const result = canvas.toDataURL(`image/${format}`);
+      const resultElement = document.getElementById('result');
+      resultElement.innerHTML = `<img src="${result}" alt="Imagen procesada"><br><a href="${result}" download="imagen.${format}">Descargar imagen</a>`;
+    };
+
+    img.src = event.target.result;
+  };
+  
+  reader.readAsDataURL(file);
+}
+</script>
+</body>
+</html>
