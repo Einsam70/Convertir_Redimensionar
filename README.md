@@ -12,7 +12,11 @@ Unicamente selecciona la imagen, selecciona el formato de destino y el nuevo tam
 
 No se precisan librerias adicionales.
 
+Actualización Mayo 2026: 
+- Añadida opciones para modo oscuro.
+- Cambio de idioma (Español / Inglés) sin refrescar página.
+- Mejorado el sistema de escalado para imágenes más nítidas.
+
 # 3. Por hacer
 
-- Opción otros idiomas
-- Modo oscuro
+- Se aceptan sugerencias ;-)

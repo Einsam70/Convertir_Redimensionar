@@ -326,7 +326,6 @@ function processImage() {
       let width = img.width;
       let height = img.height;
       
-      // NUEVA LÓGICA PARA AMPLIAR Y REDUCIR PROPORCIONALMENTE
       let ratio = 1;
       let ratioAncho = maxWidthInput ? (maxWidthInput / width) : Infinity;
       let ratioAlto = maxHeightInput ? (maxHeightInput / height) : Infinity;
@@ -343,7 +342,6 @@ function processImage() {
       canvas.width = width;
       canvas.height = height;
       
-      // NOTA DE CALIDAD: Activamos el suavizado de imagen del canvas
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
 
