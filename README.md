@@ -19,4 +19,4 @@ Actualización Mayo 2026:
 
 # 3. Por hacer
 
-- Se aceptan sugerencias ;-)
+- Se aceptan sugerencias :sweat_smile:
