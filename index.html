@@ -1,30 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Convertidor y Redimensionador de Imágenes</title>
+<title data-i18n="title">Convertidor y Redimensionador de Imágenes</title>
 <style>
+  :root {
+    --bg-body: #f4f4f4;
+    --bg-container: #fff;
+    --text-color: #333;
+    --border-color: #ccc;
+    --btn-primary: #3498db;
+    --btn-primary-hover: #2980b9;
+    --btn-success: #2ecc71;
+    --btn-success-hover: #27ae60;
+    --btn-toggle: #7f8c8d;
+  }
+
+  body.dark-mode {
+    --bg-body: #1e1e1e;
+    --bg-container: #2d2d2d;
+    --text-color: #f4f4f4;
+    --border-color: #555;
+    --btn-toggle: #f1c40f;
+  }
 
   body {
     font-family: 'Arial', sans-serif;
     margin: 20px;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: var(--bg-body);
+    color: var(--text-color);
     text-align: center;
+    transition: background-color 0.3s, color 0.3s;
   }
 
-  h2 {
+  .top-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+    max-width: 90%;
+    margin: 0 auto 20px auto;
+  }
+
+  .top-controls button, .top-controls select {
+    width: auto;
+    margin-top: 0;
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: var(--btn-toggle);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  body.dark-mode .top-controls #themeBtn {
     color: #333;
   }
 
   #container {
     width: 90%;
-    background-color: #fff;
+    background-color: var(--bg-container);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    margin: 0 auto;
+    transition: background-color 0.3s;
+  }
+
+  h2 {
+    color: var(--text-color);
   }
 
   input[type="file"] {
@@ -33,7 +80,7 @@
 
   label {
     display: block;
-    background-color: #3498db;
+    background-color: var(--btn-primary);
     color: #fff;
     padding: 10px 20px;
     border-radius: 5px;
@@ -51,7 +98,7 @@
   }
 
   label:hover {
-    background-color: #2980b9;
+    background-color: var(--btn-primary-hover);
   }
 
   select, input[type="number"], button {
@@ -59,24 +106,32 @@
     padding: 8px;
     font-size: 16px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     width: calc(50% - 10px);
     box-sizing: border-box;
+    background-color: var(--bg-container);
+    color: var(--text-color);
   }
 
-  button {
-    background-color: #2ecc71;
+  button.action-btn {
+    background-color: var(--btn-success);
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s;
+    border: none;
   }
 
-  button:hover {
-    background-color: #27ae60;
+  button.action-btn:hover {
+    background-color: var(--btn-success-hover);
   }
 
   #result {
     margin-top: 20px;
+  }
+  
+  #result img {
+    max-width: 100%;
+    height: auto;
   }
 
   #thumbnail {
@@ -101,38 +156,123 @@
     margin: 0 auto;
   }
 
+  @media (max-width: 768px) {
+    label, #formatSelect, #sicesimg {
+      width: 80%;
+    }
+  }
 </style>
 </head>
 <body>
 
-<div>
-  <h2>Convertidor y Redimensionador de Imágenes</h2>
+<div class="top-controls">
+  <select id="langSelect" onchange="changeLanguage(this.value)">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+  <button id="themeBtn" onclick="toggleTheme()" data-i18n="btnTheme">Modo Oscuro</button>
 </div>
 
-<label for="fileInput">Seleccionar Imagen</label>
-<input type="file" id="fileInput" onchange="previewImage()">
-<br>
-<div id="thumbnail"></div>
-<br>
-<div>
-  <select id="formatSelect">
-    <option value="jpeg">JPEG</option>
-    <option value="png">PNG</option>
-  </select>
-</div>
-<div id="sicesimg">
-  <input type="number" id="maxWidthInput" placeholder="Ancho máximo (opcional)">
-  <input type="number" id="maxHeightInput" placeholder="Alto máximo (opcional)">
-</div>
-<div id="sicesimg">
-  <button onclick="processImage()">Procesar Imagen</button>
-  <button onclick="limpiador()">Limpiar Formulario</button>
-</div>
-<div>
-  <div id="result"></div>
+<div id="container">
+  <div>
+    <h2 data-i18n="heading">Convertidor y Redimensionador de Imágenes</h2>
+  </div>
+
+  <label for="fileInput" data-i18n="btnSelect">Seleccionar Imagen</label>
+  <input type="file" id="fileInput" onchange="previewImage()">
+  <br>
+  <div id="thumbnail"></div>
+  <br>
+  <div>
+    <select id="formatSelect">
+      <option value="jpeg">JPEG</option>
+      <option value="png">PNG</option>
+    </select>
+  </div>
+  <div id="sicesimg">
+    <input type="number" id="maxWidthInput" data-i18n-placeholder="phWidth" placeholder="Ancho máximo (opcional)">
+    <input type="number" id="maxHeightInput" data-i18n-placeholder="phHeight" placeholder="Alto máximo (opcional)">
+  </div>
+  <div id="sicesimg">
+    <button class="action-btn" onclick="processImage()" data-i18n="btnProcess">Procesar Imagen</button>
+    <button class="action-btn" onclick="limpiador()" data-i18n="btnClean">Limpiar Formulario</button>
+  </div>
+  <div>
+    <div id="result"></div>
+  </div>
 </div>
 
 <script>
+const translations = {
+  es: {
+    title: "Convertidor y Redimensionador de Imágenes",
+    heading: "Convertidor y Redimensionador de Imágenes",
+    btnTheme: "Modo Oscuro",
+    btnSelect: "Seleccionar Imagen",
+    phWidth: "Ancho máximo (opcional)",
+    phHeight: "Alto máximo (opcional)",
+    btnProcess: "Procesar Imagen",
+    btnClean: "Limpiar Formulario",
+    alertSelect: "Por favor selecciona una imagen.",
+    downloadTxt: "Descargar imagen"
+  },
+  en: {
+    title: "Image Converter & Resizer",
+    heading: "Image Converter & Resizer",
+    btnTheme: "Dark Mode",
+    btnSelect: "Select Image",
+    phWidth: "Max width (optional)",
+    phHeight: "Max height (optional)",
+    btnProcess: "Process Image",
+    btnClean: "Clear Form",
+    alertSelect: "Please select an image.",
+    downloadTxt: "Download image"
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'es';
+
+function changeLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.getElementById('langSelect').value = lang;
+
+  document.querySelectorAll('[data-i18n]').forEach(elem => {
+    const key = elem.getAttribute('data-i18n');
+    elem.textContent = translations[lang][key];
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(elem => {
+    const key = elem.getAttribute('data-i18n-placeholder');
+    elem.placeholder = translations[lang][key];
+  });
+  
+  document.title = translations[lang]['title'];
+}
+
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark-mode');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  
+  const themeBtn = document.getElementById('themeBtn');
+  if (isDark) {
+    themeBtn.textContent = currentLang === 'es' ? "Modo Claro" : "Light Mode";
+  } else {
+    themeBtn.textContent = currentLang === 'es' ? "Modo Oscuro" : "Dark Mode";
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  changeLanguage(currentLang);
+
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.textContent = currentLang === 'es' ? "Modo Claro" : "Light Mode";
+  }
+});
+
 function previewImage() {
   const fileInput = document.getElementById('fileInput');
   const thumbnail = document.getElementById('thumbnail');
@@ -158,16 +298,11 @@ function previewImage() {
 }
 
 function limpiador() {
-  var limp1 = document.getElementById('maxWidthInput');
-  var limp2 = document.getElementById('maxHeightInput');
-  var div1 = document.getElementById("thumbnail");
-  var div2 = document.getElementById("result");
-  var dropdown1 = document.getElementById("formatSelect");
-  limp1.value = "";
-  limp2.value = "";
-  div1.innerHTML = "";
-  div2.innerHTML = "";
-  dropdown1.selectedIndex = 0;
+  document.getElementById('maxWidthInput').value = "";
+  document.getElementById('maxHeightInput').value = "";
+  document.getElementById("thumbnail").innerHTML = "";
+  document.getElementById("result").innerHTML = "";
+  document.getElementById("formatSelect").selectedIndex = 0;
 }
 
 function processImage() {
@@ -179,7 +314,7 @@ function processImage() {
   const file = fileInput.files[0];
   
   if (!file) {
-    alert('Por favor selecciona una imagen.');
+    alert(translations[currentLang].alertSelect);
     return;
   }
 
@@ -191,26 +326,41 @@ function processImage() {
       let width = img.width;
       let height = img.height;
       
-      if (maxWidthInput && width > maxWidthInput) {
-        height *= maxWidthInput / width;
-        width = maxWidthInput;
+      // NUEVA LÓGICA PARA AMPLIAR Y REDUCIR PROPORCIONALMENTE
+      let ratio = 1;
+      let ratioAncho = maxWidthInput ? (maxWidthInput / width) : Infinity;
+      let ratioAlto = maxHeightInput ? (maxHeightInput / height) : Infinity;
+
+      if (ratioAncho !== Infinity || ratioAlto !== Infinity) {
+        ratio = Math.min(ratioAncho, ratioAlto);
       }
 
-      if (maxHeightInput && height > maxHeightInput) {
-        width *= maxHeightInput / height;
-        height = maxHeightInput;
-      }
+      width = width * ratio;
+      height = height * ratio;
 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       canvas.width = width;
       canvas.height = height;
+      
+      // NOTA DE CALIDAD: Activamos el suavizado de imagen del canvas
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
       ctx.drawImage(img, 0, 0, width, height);
 
       const format = formatSelect.value;
-      const result = canvas.toDataURL(`image/${format}`);
+      const result = canvas.toDataURL(`image/${format}`); 
       const resultElement = document.getElementById('result');
-      resultElement.innerHTML = `<img src="${result}" alt="Imagen procesada"><br><a href="${result}" download="imagen.${format}">Descargar imagen</a>`;
+      
+      resultElement.innerHTML = `
+        <img src="${result}" alt="Processed"><br><br>
+        <a href="${result}" download="imagen.${format}" style="text-decoration: none;">
+          <button class="action-btn" data-i18n="downloadTxt" style="width: auto; padding: 10px 20px;">
+            ${translations[currentLang].downloadTxt}
+          </button>
+        </a>
+      `;
     };
 
     img.src = event.target.result;
