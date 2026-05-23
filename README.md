@@ -8,7 +8,7 @@ Utilidad para convertir imágenes entre formatos y/o redimensionar imágenes.
 
 Unicamente selecciona la imagen, selecciona el formato de destino y el nuevo tamaño (opcional) para la imagen. Procesa la imagen para obtener una vista previa y descarga el archivo si está correcto. La redimensión de la imagen mantendrá las proporciones originales.
 
-![Imagen mostrando aplicación 1](/screenshots/imagen1.png)
+![Imagen mostrando aplicación 1](/screenshots/imagen.png)
 
 No se precisan librerias adicionales.
 
